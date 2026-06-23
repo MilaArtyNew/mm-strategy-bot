@@ -54,8 +54,8 @@ def generate_signals(tokens: list[TokenData], regime: Regime) -> list[Signal]:
             if phase in (Phase.ACCUMULATION, Phase.DEAD):
                 continue
 
-            # Try Mode A (Long)
-            if regime.longs_allowed:
+            # Try Mode A (Long) — only in confirmed bullish BTC regime
+            if regime.longs_allowed and regime.btc_regime == "bullish":
                 sig_a = check_mode_a(token, phase)
                 if sig_a.valid:
                     signals.append(Signal(

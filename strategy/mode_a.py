@@ -75,6 +75,14 @@ def check_mode_a(token: TokenData, phase: Phase) -> ModeASignal:
     else:
         failed.append(f"Exchange concentration {conc:.0f}% > {cfg.mode_a_max_exchange_concentration}%")
 
+    # OI must still be actively growing (not just 7d average, but recent trend)
+    oi_recent = token.oi_recent_growing
+    if oi_recent is False:
+        failed.append("OI recently declining — no long entry")
+        return ModeASignal(False, 0, reasons, failed)
+    if oi_recent is True:
+        reasons.append("OI recently growing")
+
     all_pass = p1 and p2 and p3 and p4 and p5 and p6
     if not all_pass:
         return ModeASignal(False, 0, reasons, failed)

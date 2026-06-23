@@ -1,7 +1,7 @@
 """Paper trading engine — simulates trade execution with slippage + fees."""
 
 import logging
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from config import cfg
@@ -37,6 +37,20 @@ def open_paper_trade(signal: Signal, signal_id: int) -> Optional[int]:
         log.info(f"Already in {signal.symbol}, skipping")
         conn.close()
         return None
+
+    # 48h cooldown after stop loss on same symbol
+    cur.execute("""
+        SELECT closed_at FROM paper_trades
+        WHERE symbol = ? AND status = 'closed' AND exit_reason LIKE '%invalidation%'
+        ORDER BY closed_at DESC LIMIT 1
+    """, (signal.symbol,))
+    row = cur.fetchone()
+    if row:
+        last_stop = datetime.fromisoformat(row[0])
+        if datetime.now(timezone.utc) - last_stop < timedelta(hours=48):
+            log.info(f"{signal.symbol} in 48h cooldown after stop loss, skipping")
+            conn.close()
+            return None
 
     # Calculate position size
     position_usd = cfg.paper_virtual_equity * (cfg.paper_position_size_pct / 100)

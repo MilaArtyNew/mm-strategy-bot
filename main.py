@@ -76,13 +76,16 @@ async def _enrich_token_data(raw: dict) -> TokenData:
         pass
 
     oi_flattening = None
+    oi_recent_growing = None
     try:
         oi_hist = await get_oi_history(sym, period="4h", limit=6)
         if len(oi_hist) >= 4:
             recent_avg = sum(float(h["sumOpenInterest"]) for h in oi_hist[-2:]) / 2
             prev_avg = sum(float(h["sumOpenInterest"]) for h in oi_hist[-4:-2]) / 2
             if prev_avg > 0:
-                oi_flattening = (recent_avg - prev_avg) / prev_avg < 0.02
+                change = (recent_avg - prev_avg) / prev_avg
+                oi_flattening = change < 0.02
+                oi_recent_growing = change > 0.01
     except Exception:
         pass
 
@@ -112,6 +115,7 @@ async def _enrich_token_data(raw: dict) -> TokenData:
         funding_trend=funding_trend,
         oi_flattening=oi_flattening,
         failed_breakout=failed_breakout,
+        oi_recent_growing=oi_recent_growing,
     )
 
 

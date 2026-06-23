@@ -32,6 +32,7 @@ class TokenData:
     funding_trend: Optional[str] = None     # improving | neutral | worsening
     oi_flattening: Optional[bool] = None    # OI growth slowing last 2 periods
     failed_breakout: Optional[bool] = None  # price tried higher high, failed
+    oi_recent_growing: Optional[bool] = None  # OI still growing in last 2 periods
 
 
 def classify_phase(token: TokenData) -> Phase:

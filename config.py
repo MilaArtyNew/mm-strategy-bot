@@ -23,17 +23,17 @@ class Config:
 
     # Mode A — Long thresholds
     mode_a_max_float_pct: float = 25.0
-    mode_a_min_oi_growth_7d: float = 50.0
-    mode_a_min_price_growth_7d: float = 20.0
+    mode_a_min_oi_growth_7d: float = 70.0
+    mode_a_min_price_growth_7d: float = 30.0
     mode_a_max_funding_pct: float = 0.1        # funding must be below this (neutral/neg)
     mode_a_max_exchange_concentration: float = 65.0
 
     # Mode B — Short thresholds
     mode_b_max_float_pct: float = 25.0
-    mode_b_min_oi_growth_7d: float = 100.0
-    mode_b_min_price_growth_7d: float = 50.0
-    mode_b_min_funding_pct: float = 0.5        # funding must be above this
-    mode_b_min_taker_ratio: float = 0.65
+    mode_b_min_oi_growth_7d: float = 70.0
+    mode_b_min_price_growth_7d: float = 35.0
+    mode_b_min_funding_pct: float = 0.35       # funding must be above this
+    mode_b_min_taker_ratio: float = 0.60
     mode_b_max_exchange_concentration: float = 65.0
 
     # Mode A exit signals
