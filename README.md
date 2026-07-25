@@ -1,11 +1,12 @@
 # Mm Strategy Bot
 
-A Telegram bot project for automating operational workflows and user commands.
+Market-making / short-squeeze signal bot that scans funding, open interest, taker ratios, regimes, and metrics for selected crypto markets. It is used for monitoring MM-style strategy conditions, not generic notifications.
 
 ## Features
 
-- Telegram bot command handling and operational notifications.
-- Persistent storage for state, logs, or domain data.
+- Scans market regime, OI, funding, and taker long/short ratio inputs.
+- Provides Telegram commands for scan, metrics, regime, status, and help.
+- Documents setup for exchange data APIs and runtime service deployment.
 
 ## Architecture
 
@@ -43,8 +44,8 @@ python main.py
 ## Bot Commands
 
 - `/help` — Show help and available commands.
-- `/metrics` — Project-specific command; see the bot implementation for exact behavior.
-- `/regime` — Project-specific command; see the bot implementation for exact behavior.
+- `/metrics` — Show strategy or project metrics.
+- `/regime` — Show current market regime.
 - `/scan` — Run a scan.
 - `/start` — Start the bot and show the main entry message.
 - `/status` — Show current service or strategy status.
