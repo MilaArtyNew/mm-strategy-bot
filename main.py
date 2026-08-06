@@ -9,6 +9,7 @@ Architecture:
 
 import asyncio
 import logging
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
@@ -235,8 +236,18 @@ async def run_monitor() -> None:
                     log.error(f"Failed to send close notification: {e}")
 
 
+def _is_disabled() -> bool:
+    value = os.getenv("MM_STRATEGY_ENABLED", os.getenv("BOT_ENABLED", "true"))
+    return value.strip().lower() in {"0", "false", "no", "off", "disabled"}
+
+
 async def main() -> None:
     global _app
+
+    if _is_disabled():
+        log.warning("MM Strategy bot is disabled by MM_STRATEGY_ENABLED/BOT_ENABLED; idling without Telegram polling or scheduler jobs")
+        while True:
+            await asyncio.sleep(3600)
 
     init_db()
     log.info("Database initialized")
